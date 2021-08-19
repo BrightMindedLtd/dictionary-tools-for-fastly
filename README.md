@@ -12,13 +12,15 @@ Once installed you can run the tool by calling `bin/main` or `vendor/bin/main` f
 
 ## Usage
 
+### dictionary:import
+
 There are currently two commands; one for importing from CSV and one for exporting to CSV.
 
 ```
 dictionary:import [-s|--service_id SERVICE_ID] [-d|--dictionary_id DICTIONARY_ID] [--skip-header-row] [--] <file>
 ```
 
-### Options
+#### Options
 
 ```
 Arguments:
@@ -38,11 +40,13 @@ The CSV can contain an optional header row (if so, use `--skip-header-row`), mus
 
 The CSV will be compared with the current dictionary, and items will be added and removed as necessary so that the dictionary matches the CSV contents. **Important:** this is a destructive operation. Ensure you have a backup of your dictionary before starting. See the `dictionary:export` command.
 
+### dictionary:export
+
 ```
 dictionary:export [-s|--service_id SERVICE_ID] [-d|--dictionary_id DICTIONARY_ID] [--skip-header-row]
 ```
 
-### Options
+#### Options
 
 ```
 Options:
