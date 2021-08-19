@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+if (PHP_SAPI !== 'cli') {
+	echo 'This tool be run as a CLI application';
+	exit(1);
+}
+
+$app = new App\Bootstrap();
+$app->run();

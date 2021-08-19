@@ -1,0 +1,19 @@
+{
+    "name": "brightmindedltd/dictionary-tools-for-fastly",
+    "require": {
+        "symfony/console": "^5.3",
+        "rmccue/requests": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    },
+    "bin": ["bin/main"],
+    "authors": [
+        {
+            "name": "Bradley Taylor",
+            "email": "bradley.taylor@brightminded.com"
+        }
+    ]
+}
