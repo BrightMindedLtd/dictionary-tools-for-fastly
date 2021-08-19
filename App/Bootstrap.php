@@ -3,6 +3,7 @@ namespace App;
 
 use Symfony\Component\Console\Application;
 use App\Command\ImportCommand;
+use App\Command\ExportCommand;
 
 class Bootstrap
 {
@@ -10,6 +11,7 @@ class Bootstrap
 	{
 		$application = new Application();
 		$application->add(new ImportCommand());
+		$application->add(new ExportCommand());
 		$application->run();
 	}
 }

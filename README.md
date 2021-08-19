@@ -1,6 +1,6 @@
 # Dictionary Tools for Fastly
 
-This project provides CLI tools for making working with [Fastly Edge Dictionaries](https://docs.fastly.com/en/guides/about-edge-dictionaries) more straightforward. 
+This project provides CLI tools for making working with [Fastly Edge Dictionaries](https://docs.fastly.com/en/guides/about-edge-dictionaries) more straightforward. This allows for Edge Dictionaries to be populated from CSV and backed-up to CSV.
 
 ## Installation
 
@@ -12,7 +12,7 @@ Once installed you can run the tool by calling `bin/main` or `vendor/bin/main` f
 
 ## Usage
 
-There is currently one command:
+There are currently two commands; one for importing from CSV and one for exporting to CSV.
 
 ```
 dictionary:import [-s|--service_id SERVICE_ID] [-d|--dictionary_id DICTIONARY_ID] [--skip-header-row] [--] <file>
@@ -36,7 +36,22 @@ The CSV should contain two columns:
 
 The CSV can contain an optional header row (if so, use `--skip-header-row`), must be comma-delimited and does not currently support enclosure characters.
 
-The CSV will be compared with the current dictionary, and items will be added and removed as necessary so that the dictionary matches the CSV contents. **Important:** this is a destructive operation. Ensure you have a backup of your dictionary before starting.
+The CSV will be compared with the current dictionary, and items will be added and removed as necessary so that the dictionary matches the CSV contents. **Important:** this is a destructive operation. Ensure you have a backup of your dictionary before starting. See the `dictionary:export` command.
+
+```
+dictionary:export [-s|--service_id SERVICE_ID] [-d|--dictionary_id DICTIONARY_ID] [--skip-header-row]
+```
+
+### Options
+
+```
+Options:
+  -s, --service_id=SERVICE_ID        Fastly service ID
+  -d, --dictionary_id=DICTIONARY_ID  Fastly dictionary ID
+      --skip-header-row              Skip header row
+```
+
+This command will write to STDOUT, therefore it is recommended that you pipe the command to a CSV file.
 
 ## Issues
 
