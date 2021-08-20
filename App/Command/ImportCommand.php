@@ -54,19 +54,24 @@ class ImportCommand extends Command
 
 		$apiKey = Utils::promptApiKey('Fastly API Key: ', $this, $input, $output);
 
-		$fastlyClient = new Client($apiKey);
-		$currentItems = $fastlyClient->getDictionaryItems($serviceId, $dictionaryId);
-		$currentItemPairs = Utils::pluck($currentItems, 'item_value', 'item_key');
+		try {
+			$fastlyClient = new Client($apiKey);
+			$currentItems = $fastlyClient->getDictionaryItems($serviceId, $dictionaryId);
+			$currentItemPairs = Utils::pluck($currentItems, 'item_value', 'item_key');
 
-		$csvHandle = fopen($csvFile, "r");
-		if ($csvHandle === FALSE) {
-			throw new \Exception('Could not read CSV file');
+			$csvHandle = fopen($csvFile, "r");
+			if ($csvHandle === FALSE) {
+				throw new \Exception('Could not read CSV file');
+			}
+
+			$dictionaryPatchArray = $this->createDictionaryPatchArray($csvHandle, $currentItemPairs, $skipHeaderRow);
+			fclose($csvHandle);
+
+			$fastlyClient->patchDictionaryItems($serviceId, $dictionaryId, $dictionaryPatchArray);
+		} catch (\Exception $e) {
+			$io->error($e->getMessage());
+			return Command::FAILURE;
 		}
-
-		$dictionaryPatchArray = $this->createDictionaryPatchArray($csvHandle, $currentItemPairs, $skipHeaderRow);
-		fclose($csvHandle);
-
-		$fastlyClient->patchDictionaryItems($serviceId, $dictionaryId, $dictionaryPatchArray);
 
 		return Command::SUCCESS;
 	}

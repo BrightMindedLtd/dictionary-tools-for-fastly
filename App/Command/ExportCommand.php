@@ -47,20 +47,25 @@ class ExportCommand extends Command
 
 		$apiKey = Utils::promptApiKey('Fastly API Key: ', $this, $input, $output);
 
-		$fastlyClient = new Client($apiKey);
-		$currentItems = $fastlyClient->getDictionaryItems($serviceId, $dictionaryId);
-		$currentItemPairs = Utils::pluck($currentItems, 'item_value', 'item_key');
+		try {
+			$fastlyClient = new Client($apiKey);
+			$currentItems = $fastlyClient->getDictionaryItems($serviceId, $dictionaryId);
+			$currentItemPairs = Utils::pluck($currentItems, 'item_value', 'item_key');
 
-		if (!$skipHeaderRow) {
-			fputcsv(STDOUT, [
-				'Dictionary Key', 'Dictionary Value'
-			]);
-		}
+			if (!$skipHeaderRow) {
+				fputcsv(STDOUT, [
+					'Dictionary Key', 'Dictionary Value'
+				]);
+			}
 
-		foreach ($currentItemPairs as $key => $value) {
-			fputcsv(STDOUT, [
-				$key, $value
-			]);
+			foreach ($currentItemPairs as $key => $value) {
+				fputcsv(STDOUT, [
+					$key, $value
+				]);
+			}
+		} catch (\Exception $e) {
+			$io->error($e->getMessage());
+			return Command::FAILURE;
 		}
 
 		return Command::SUCCESS;

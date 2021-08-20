@@ -48,7 +48,7 @@ class Client
 			$method
 		);
 		if (!$response->success) {
-			throw new \Exception('Request could not be made with response ' . $response->status_code);
+			throw new \Exception(ErrorMapper::getErrorMessage($response->status_code));
 		}
 		return $response;
 	}
