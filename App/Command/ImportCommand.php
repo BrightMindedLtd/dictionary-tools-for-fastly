@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Fastly\Client;
 use App\Utils;
 
@@ -40,17 +40,19 @@ class ImportCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		$io = new SymfonyStyle($input, $output);
+
 		$serviceId = $input->getOption(self::OPTION_SERVICE_ID);
 		$dictionaryId = $input->getOption(self::OPTION_DICTIONARY_ID);
 		$skipHeaderRow = (bool) $input->getOption(self::OPTION_SKIP_HEADER_ROW);
 		$csvFile = $input->getArgument(self::ARGUMENT_FILE);
 
-		$questionHelper = $this->getHelper('question');
-		$question = new Question('Fastly API Key: ');
-		$question->setHidden(true);
-		$question->setHiddenFallback(false);
+		if (empty($serviceId) || empty($dictionaryId)) {
+			$io->error('You must specify a service and dictionary ID in order to run this command');
+			return Command::INVALID;
+		}
 
-		$apiKey = $questionHelper->ask($input, $output, $question);
+		$apiKey = Utils::promptApiKey('Fastly API Key: ', $this, $input, $output);
 
 		$fastlyClient = new Client($apiKey);
 		$currentItems = $fastlyClient->getDictionaryItems($serviceId, $dictionaryId);

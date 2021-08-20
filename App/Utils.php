@@ -2,6 +2,11 @@
 
 namespace App;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
+
 class Utils
 {
 	/**
@@ -39,5 +44,15 @@ class Utils
 		}
 
 		return $newlist;
+	}
+
+	public static function promptApiKey(string $question, Command $command, InputInterface $input, OutputInterface $output)
+	{
+		$questionHelper = $command->getHelper('question');
+		$question = new Question('Fastly API Key: ');
+		$question->setHidden(true);
+		$question->setHiddenFallback(false);
+
+		return $questionHelper->ask($input, $output, $question);
 	}
 }
