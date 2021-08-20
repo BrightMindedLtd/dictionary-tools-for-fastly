@@ -76,7 +76,7 @@ class ImportCommand extends Command
 
 		$skippedHeader = false;
 
-		while (($data = fgetcsv($csvHandle, 1000, ",")) !== FALSE) {
+		while (($data = fgetcsv($csvHandle, 0, ",")) !== FALSE) {
 
 			if ($skipHeaderRow && !$skippedHeader) {
 				$skippedHeader = true;
